@@ -141,7 +141,6 @@
     <Compile Include="Controllers\ApiKeysController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ShortUrlsController.cs" />
-    <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Dtos\ApiKeyDto.cs" />
     <Compile Include="Dtos\ShortUrlUsageDto.cs" />
     <Compile Include="Dtos\ShortUrlDto.cs" />
@@ -179,8 +178,13 @@
     <Compile Include="Services\ShortUrlService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\android-chrome-192x192.png" />
+    <Content Include="Content\android-chrome-512x512.png" />
+    <Content Include="Content\apple-touch-icon.png" />
     <Content Include="Content\style.css" />
-    <Content Include="favicon.ico" />
+    <Content Include="Content\favicon-16x16.png" />
+    <Content Include="Content\favicon-32x32.png" />
+    <Content Include="Content\favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Models\UrlShortener.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -219,6 +223,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Content\site.webmanifest.json" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
