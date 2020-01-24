@@ -1,0 +1,230 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="UrlShortenerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ApiKey">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Username" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="AccessKey" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="isAdmin" Type="bit" Nullable="false" />
+          <Property Name="isActive" Type="bit" Nullable="false" />
+          <Property Name="CreatedAt" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ShortUrl">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OriginalUrl" Type="varchar(max)" Nullable="false" />
+          <Property Name="Url" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="isPermanent" Type="bit" Nullable="false" />
+          <Property Name="CreatorId" Type="int" />
+          <Property Name="ApiKeyId" Type="int" Nullable="false" />
+          <Property Name="CreatedAt" Type="datetime" Nullable="false" />
+          <Property Name="ExpiresAt" Type="datetime" />
+        </EntityType>
+        <EntityType Name="ShortUrlUsage">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ShortUrlId" Type="int" Nullable="false" />
+          <Property Name="ClientIP" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="ClientBrowser" Type="varchar(max)" Nullable="false" />
+          <Property Name="ClientDevice" Type="varchar" MaxLength="64" Nullable="false" />
+          <Property Name="ClientOS" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="CreatedAt" Type="datetime" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_ShortUrl_ApiKey">
+          <End Role="ApiKey" Type="Self.ApiKey" Multiplicity="1" />
+          <End Role="ShortUrl" Type="Self.ShortUrl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApiKey">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ShortUrl">
+              <PropertyRef Name="ApiKeyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ShortUrlUsage_ShortUrl">
+          <End Role="ShortUrl" Type="Self.ShortUrl" Multiplicity="1" />
+          <End Role="ShortUrlUsage" Type="Self.ShortUrlUsage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ShortUrl">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ShortUrlUsage">
+              <PropertyRef Name="ShortUrlId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="UrlShortenerModelStoreContainer">
+          <EntitySet Name="ApiKey" EntityType="Self.ApiKey" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ShortUrl" EntityType="Self.ShortUrl" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ShortUrlUsage" EntityType="Self.ShortUrlUsage" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_ShortUrl_ApiKey" Association="Self.FK_ShortUrl_ApiKey">
+            <End Role="ApiKey" EntitySet="ApiKey" />
+            <End Role="ShortUrl" EntitySet="ShortUrl" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShortUrlUsage_ShortUrl" Association="Self.FK_ShortUrlUsage_ShortUrl">
+            <End Role="ShortUrl" EntitySet="ShortUrl" />
+            <End Role="ShortUrlUsage" EntitySet="ShortUrlUsage" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="UrlShortenerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="UrlShortenerEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ApiKeys" EntityType="UrlShortenerModel.ApiKey" />
+          <EntitySet Name="ShortUrls" EntityType="UrlShortenerModel.ShortUrl" />
+          <EntitySet Name="ShortUrlUsages" EntityType="UrlShortenerModel.ShortUrlUsage" />
+          <AssociationSet Name="FK_ShortUrl_ApiKey" Association="UrlShortenerModel.FK_ShortUrl_ApiKey">
+            <End Role="ApiKey" EntitySet="ApiKeys" />
+            <End Role="ShortUrl" EntitySet="ShortUrls" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShortUrlUsage_ShortUrl" Association="UrlShortenerModel.FK_ShortUrlUsage_ShortUrl">
+            <End Role="ShortUrl" EntitySet="ShortUrls" />
+            <End Role="ShortUrlUsage" EntitySet="ShortUrlUsages" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="ApiKey">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="AccessKey" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="isAdmin" Type="Boolean" Nullable="false" />
+          <Property Name="isActive" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="ShortUrls" Relationship="UrlShortenerModel.FK_ShortUrl_ApiKey" FromRole="ApiKey" ToRole="ShortUrl" />
+        </EntityType>
+        <EntityType Name="ShortUrl">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OriginalUrl" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Url" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="isPermanent" Type="Boolean" Nullable="false" />
+          <Property Name="CreatorId" Type="Int32" />
+          <Property Name="ApiKeyId" Type="Int32" Nullable="false" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ExpiresAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="ApiKey" Relationship="UrlShortenerModel.FK_ShortUrl_ApiKey" FromRole="ShortUrl" ToRole="ApiKey" />
+          <NavigationProperty Name="ShortUrlUsages" Relationship="UrlShortenerModel.FK_ShortUrlUsage_ShortUrl" FromRole="ShortUrl" ToRole="ShortUrlUsage" />
+        </EntityType>
+        <EntityType Name="ShortUrlUsage">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ShortUrlId" Type="Int32" Nullable="false" />
+          <Property Name="ClientIP" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="ClientBrowser" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ClientDevice" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="false" />
+          <Property Name="ClientOS" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="ShortUrl" Relationship="UrlShortenerModel.FK_ShortUrlUsage_ShortUrl" FromRole="ShortUrlUsage" ToRole="ShortUrl" />
+        </EntityType>
+        <Association Name="FK_ShortUrl_ApiKey">
+          <End Type="UrlShortenerModel.ApiKey" Role="ApiKey" Multiplicity="1" />
+          <End Type="UrlShortenerModel.ShortUrl" Role="ShortUrl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApiKey">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ShortUrl">
+              <PropertyRef Name="ApiKeyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ShortUrlUsage_ShortUrl">
+          <End Type="UrlShortenerModel.ShortUrl" Role="ShortUrl" Multiplicity="1" />
+          <End Type="UrlShortenerModel.ShortUrlUsage" Role="ShortUrlUsage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ShortUrl">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ShortUrlUsage">
+              <PropertyRef Name="ShortUrlId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="UrlShortenerModelStoreContainer" CdmEntityContainer="UrlShortenerEntities">
+          <EntitySetMapping Name="ApiKeys">
+            <EntityTypeMapping TypeName="UrlShortenerModel.ApiKey">
+              <MappingFragment StoreEntitySet="ApiKey">
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="isActive" ColumnName="isActive" />
+                <ScalarProperty Name="isAdmin" ColumnName="isAdmin" />
+                <ScalarProperty Name="AccessKey" ColumnName="AccessKey" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ShortUrls">
+            <EntityTypeMapping TypeName="UrlShortenerModel.ShortUrl">
+              <MappingFragment StoreEntitySet="ShortUrl">
+                <ScalarProperty Name="ExpiresAt" ColumnName="ExpiresAt" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="ApiKeyId" ColumnName="ApiKeyId" />
+                <ScalarProperty Name="CreatorId" ColumnName="CreatorId" />
+                <ScalarProperty Name="isPermanent" ColumnName="isPermanent" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="OriginalUrl" ColumnName="OriginalUrl" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ShortUrlUsages">
+            <EntityTypeMapping TypeName="UrlShortenerModel.ShortUrlUsage">
+              <MappingFragment StoreEntitySet="ShortUrlUsage">
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="ClientOS" ColumnName="ClientOS" />
+                <ScalarProperty Name="ClientDevice" ColumnName="ClientDevice" />
+                <ScalarProperty Name="ClientBrowser" ColumnName="ClientBrowser" />
+                <ScalarProperty Name="ClientIP" ColumnName="ClientIP" />
+                <ScalarProperty Name="ShortUrlId" ColumnName="ShortUrlId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
