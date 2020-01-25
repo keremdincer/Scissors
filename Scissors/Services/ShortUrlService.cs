@@ -31,6 +31,21 @@ namespace Scissors.Services
 
         public static ShortUrl Create(ShortUrlDto dto)
         {
+            // Eğer üretilmek istenen original url kalıcı bir bağlantıysa,
+            // ve daha önce aynı original url için kalıcı bir bağlantı oluşturulmuşsa
+            // yeni bir bağlantı oluşturmak yerine varolanı döndür.
+            // Kullanıcı bazlı olarak!.
+
+            var shortUrlRecord = db.ShortUrls.FirstOrDefault(x =>
+                x.OriginalUrl == dto.OriginalUrl &&
+                x.ApiKeyId == dto.ApiKeyId &&
+                x.isPermanent == dto.isPermanent
+            );
+
+            if (shortUrlRecord != null)
+                return shortUrlRecord;
+
+
             var newShortUrl = new ShortUrl() {
                 OriginalUrl = dto.OriginalUrl,
                 Url = UniqueId.Generate(),
